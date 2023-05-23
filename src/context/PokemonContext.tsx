@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode  } from 'react';
 import axios from 'axios';
 
 export interface Pokemon {
@@ -16,7 +16,6 @@ interface PokemonContextProps {
   setSearchName: (name: string) => void;
   setSearchAbilities: (abilities: string[]) => void;
   removePokemon: (name: string) => void;
-  allAbilities: string[]; // Agregar la propiedad 'allAbilities' a la interfaz
 }
 
 export const PokemonContext = createContext<PokemonContextProps>({
@@ -27,7 +26,6 @@ export const PokemonContext = createContext<PokemonContextProps>({
   setSearchName: () => {},
   setSearchAbilities: () => {},
   removePokemon: () => {},
-  allAbilities: [], // Inicializar la propiedad 'allAbilities' con un arreglo vacío
 });
 
 export const PokemonProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -35,7 +33,6 @@ export const PokemonProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [filteredList, setFilteredList] = useState<Pokemon[]>([]);
   const [searchName, setSearchName] = useState<string>('');
   const [searchAbilities, setSearchAbilities] = useState<string[]>([]);
-  const [allAbilities, setAllAbilities] = useState<string[]>([]); 
 
   useEffect(() => {
     axios
@@ -59,12 +56,6 @@ export const PokemonProvider: React.FC<{ children: ReactNode }> = ({ children })
           )
         ).then(() => {
           setPokemonList(pokemons);
-
-          // Obtener todas las habilidades
-          const abilities = Array.from(
-            new Set(pokemons.flatMap((pokemon) => pokemon.abilities))
-          );
-          setAllAbilities(abilities);
         });
       })
       .catch((error) => {
@@ -97,7 +88,6 @@ export const PokemonProvider: React.FC<{ children: ReactNode }> = ({ children })
         setSearchName,
         setSearchAbilities,
         removePokemon,
-        allAbilities, 
       }}
     >
       {children}

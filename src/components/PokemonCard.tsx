@@ -1,19 +1,26 @@
 import React from 'react';
-import { Card, CardContent, Typography } from '@material-ui/core';
-import { Pokemon } from '../context/PokemonContext';
+import { Card, CardContent, Typography, IconButton } from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 
 interface PokemonCardProps {
-  pokemon: Pokemon;
+  name: string;
+  image: string;
+  weight: number;
+  abilities: string[];
+  onRemove: () => void;
 }
 
-const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
+const PokemonCard: React.FC<PokemonCardProps> = ({ name, image, weight, abilities, onRemove }) => {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h5">{pokemon.name}</Typography>
-        <img src={pokemon.image} alt={pokemon.name} />
-        <Typography>Weight: {pokemon.weight}</Typography>
-        <Typography>Abilities: {pokemon.abilities.join(', ')}</Typography>
+        <Typography variant="h5">{name}</Typography>
+        <img src={image} alt={name} />
+        <Typography>Weight: {weight}</Typography>
+        <Typography>Abilities: {abilities.join(', ')}</Typography>
+        <IconButton onClick={onRemove}>
+          <DeleteIcon />
+        </IconButton>
       </CardContent>
     </Card>
   );
