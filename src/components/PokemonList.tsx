@@ -19,7 +19,7 @@ const PokemonList: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100');
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1792');
         const { results } = response.data;
         const pokemonList = await Promise.all(
           results.map(async (result: any) => {
@@ -49,12 +49,12 @@ const PokemonList: React.FC = () => {
 
   const filteredByAbilities = searchAbilities.length
     ? filteredByName.filter((pokemon) =>
-        searchAbilities.some((ability) =>
-          pokemon.abilities.some((pokemonAbility) =>
-            pokemonAbility.toLowerCase().includes(ability.toLowerCase())
-          )
+      searchAbilities.some((ability) =>
+        pokemon.abilities.some((pokemonAbility) =>
+          pokemonAbility.toLowerCase().includes(ability.toLowerCase())
         )
       )
+    )
     : filteredByName;
 
   const removePokemon = (name: string) => {
@@ -64,14 +64,17 @@ const PokemonList: React.FC = () => {
   };
 
   if (isLoading) {
-    return <CircularProgress />;
+    return <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+      <CircularProgress />
+    </Box>;
   }
 
   return (
-    <Box>
-      <Typography variant="h4">Pokémon List</Typography>
+    <Box textAlign={'center'} >
+      <Typography mb={8} variant="h4">Pokemons!</Typography>
 
       <TextField
+
         label="Search by name"
         value={searchName}
         onChange={(event) => setSearchName(event.target.value)}
@@ -82,20 +85,21 @@ const PokemonList: React.FC = () => {
         value={searchAbilities.join(',')}
         onChange={(event) => setSearchAbilities(event.target.value.split(','))}
       />
-
-      <Grid container spacing={2}>
-        {filteredByAbilities.map((pokemon) => (
-          <Grid item key={pokemon.name} xs={12} sm={6} md={4} lg={3}>
-            <PokemonCard
-              name={pokemon.name}
-              image={pokemon.image}
-              weight={pokemon.weight}
-              abilities={pokemon.abilities}
-              onRemove={() => removePokemon(pokemon.name)}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      <Box sx={{ width: '100%', marginTop: 10}}>
+      <Grid container spacing={2} direction="row">
+          {filteredByAbilities.map((pokemon) => (
+            <Grid item key={pokemon.name} xs={12} sm={6} md={4} lg={3}>
+              <PokemonCard
+                name={pokemon.name}
+                image={pokemon.image}
+                weight={pokemon.weight}
+                abilities={pokemon.abilities}
+                onRemove={() => removePokemon(pokemon.name)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 };
